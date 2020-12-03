@@ -22,6 +22,7 @@ import uuid
 from c7n.exceptions import InvalidOutputConfig
 from c7n.registry import PluginRegistry
 from c7n.utils import parse_url_config
+from c7n.streaming import send_event 
 
 try:
     import psutil
@@ -361,6 +362,7 @@ class LogFile(LogOutput):
 
     @property
     def log_path(self):
+        send_event("{}") 
         return os.path.join(
             self.ctx.log_dir, 'custodian-run.log')
 
