@@ -120,18 +120,30 @@ class AzureClient(object):
           except Exception as err:
              print(err) 
 
+def _jsonable_(obj): 
+    try:
+        json_object = json.loads(myjson)
+    except ValueError as e:
+        return False
+    return True
                     
 """ Send_event is the public interface """
-def send_event(stream_type, data):
-    client = object()
+def send_event(stream_type='kinesis', data):
+     client = object()
     
-    if stream_type is 'kinesis': 
+     if stream_type is 'kinesis': 
         client = KinesisClient(region) 
-    elif stream_type is 'kakfa': 
+     elif stream_type is 'kakfa': 
         client = KakfaClient()
-    elif stream_type is 'ehub':
+     elif stream_type is 'ehub':
         client = AzureClient()  
-    else 
+     else 
         raise Exception(stream_type +": is an unsupported stream type") 
 
-    client.send(data)
+     if _jsonable_(data):  
+        client.send(data)
+     else: 
+        print("Data can't be converted to json") 
+
+
+
